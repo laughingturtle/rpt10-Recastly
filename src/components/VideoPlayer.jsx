@@ -35,7 +35,7 @@
 
 var VideoPlayer = (props) => {
   const link = "https://www.youtube.com/embed/" + props.video.id.videoId;
-  console.log('our var ', props.video.id.videoId);
+  //console.log('our var ', props.video.id.videoId);
   return (
     <div className="video-player">
       <div className="embed-responsive embed-responsive-16by9">
