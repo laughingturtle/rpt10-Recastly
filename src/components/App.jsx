@@ -1,3 +1,4 @@
+// a nothing comment
 class App extends React.Component {
 
   constructor(props) {
