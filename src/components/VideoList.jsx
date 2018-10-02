@@ -16,12 +16,12 @@
 
 var VideoList = (props) => (
   <div className="video-list">
-    {props.videos.map((video, index) =>
-      <VideoListEntry key = {index} video = {video}/>)}
+    {props.videos.map((video, index) => {
+      //console.log('props = ', props);
+      return <VideoListEntry key = {index} video = {video} onItemClick={props.handleClick}/>;
+    })}
   </div>
 );
-
-
 
 
 // PropTypes tell other developers what `props` a component expects
