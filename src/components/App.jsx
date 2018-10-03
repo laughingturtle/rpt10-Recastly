@@ -1,13 +1,28 @@
-// a nothing comment
+// nothing comment
 class App extends React.Component {
-
+  // console.log(window.searchYouTube);
   constructor(props) {
     super(props);
     this.state = {
-      videos: window.exampleVideoData,
-      currVideo: window.exampleVideoData[0]
+      videos: [],
+      currVideo: {},
+      loaded: false
     };
     this.onItemClick = this.onItemClick.bind(this);
+    this.updateVideos = this.updateVideos.bind(this);
+  }
+
+  componentDidMount () {
+    this.props.searchYouTube({ key: window.YOUTUBE_API_KEY, query: 'cats', max: 10 }, this.updateVideos);
+  }
+
+  updateVideos (data) {
+    console.log('our data in app = ', data);
+    this.setState({
+      videos: data,
+      currVideo: data[0],
+      loaded: true
+    });
   }
 
   onItemClick(i) {
@@ -18,6 +33,7 @@ class App extends React.Component {
   }
 
   render() {
+    //if (this.loaded) {
     return (
       <div>
         <nav className="navbar">
@@ -35,7 +51,11 @@ class App extends React.Component {
         </div>
       </div>
     );
+    // console.log('new this = ', this);
+    // console.log('our data in App = ', data);
   }
+
+  //}
 }
 
 // In the ES6 spec, files are "modules" and do not share a top-level scope

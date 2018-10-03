@@ -16,9 +16,10 @@ var searchYouTube = (options, callback) => {
   })
     .done(function(data) {
       callback(data.items);
-      console.log('our data', data.items);
+      console.log('our data in SearchYouTube', data.items);
       console.log('yay we have tubes!');
-      // new VideoListView(data);
+      //new App(data.items);
+      //return data.items;
     })
     .fail(function(data) {
       console.log('boo, no tubes', data);
