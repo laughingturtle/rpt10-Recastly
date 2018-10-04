@@ -4,14 +4,18 @@ class App extends React.Component {
     this.state = {
       videos: [],
       currVideo: null,
-      loaded: false
+      loaded: false,
+      //input: 'zebra',
+      value: 'horse'
     };
     this.onItemClick = this.onItemClick.bind(this);
     this.updateVideos = this.updateVideos.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount () {
-    this.props.searchYouTube({ key: this.props.API_KEY, query: 'zebra', max: 10 }, this.updateVideos);
+    this.props.searchYouTube({ key: this.props.API_KEY, query: this.state.value, max: 10 }, this.updateVideos);
   }
 
   updateVideos (data) {
@@ -32,13 +36,32 @@ class App extends React.Component {
     });
   }
 
+  handleChange(event) {
+    this.setState({value: event.target.value});
+    //this.search();
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    console.log('Button Pressed');
+    console.log('e = ', + this.state.value);
+    //alert('Our Search String: ', this.state.value);
+    //this.setState({value: event.target.value});
+    this.search();
+  }
+
+  search() {
+    setTimeout(this.props.searchYouTube({ key: this.props.API_KEY, query: this.state.value, max: 10 }, this.updateVideos), 500);
+  }
+
+
   render() {
     if (this.state.loaded) {
       return (
         <div>
           <nav className="navbar">
             <div className="col-md-6 offset-md-3">
-              <Search />
+              <Search formHandler={this.handleSubmit} textFormState={this.state.formState} handleTextChange={this.handleChange}/>
             </div>
           </nav>
           <div className="row">
