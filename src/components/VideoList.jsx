@@ -33,17 +33,3 @@ VideoList.propTypes = {
 // In the ES6 spec, files are "modules" and do not share a top-level scope.
 // `var` declarations will only exist globally where explicitly defined.
 window.VideoList = VideoList;
-
-//ReactDOM.render(<VideoList videoItem={window.VideoList} />, document.getElementByClass('video-list'));
-
-// var GroceryList = (props) => {
-//   console.log(props);
-//   return (<ul>
-//       {props.groceryItems.map(groceryItem =>
-//           <GroceryListItem groceryItem={groceryItem} />
-//       )}
-//   </ul>
-//   )
-// }
-// var list = ['Cucumber', 'Fluffy Kale', 'A Singleton Strawberry'];
-//

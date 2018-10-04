@@ -1,11 +1,9 @@
-// nothing comment
 class App extends React.Component {
-  // console.log(window.searchYouTube);
   constructor(props) {
     super(props);
     this.state = {
       videos: [],
-      currVideo: {},
+      currVideo: null,
       loaded: false
     };
     this.onItemClick = this.onItemClick.bind(this);
@@ -13,15 +11,17 @@ class App extends React.Component {
   }
 
   componentDidMount () {
-    this.props.searchYouTube({ key: window.YOUTUBE_API_KEY, query: 'cats', max: 10 }, this.updateVideos);
+    this.props.searchYouTube({ key: this.props.API_KEY, query: 'zebra', max: 10 }, this.updateVideos);
   }
 
   updateVideos (data) {
     console.log('our data in app = ', data);
     this.setState({
+      loaded: true,
       videos: data,
-      currVideo: data[0],
-      loaded: true
+      currVideo: data[0]
+    }, function() {
+      console.log('data in update videos = ', this.state);
     });
   }
 
@@ -33,29 +33,30 @@ class App extends React.Component {
   }
 
   render() {
-    //if (this.loaded) {
-    return (
-      <div>
-        <nav className="navbar">
-          <div className="col-md-6 offset-md-3">
-            <Search />
-          </div>
-        </nav>
-        <div className="row">
-          <div className="col-md-7">
-            <VideoPlayer video={this.state.currVideo} />
-          </div>
-          <div className="col-md-5">
-            <VideoList videos={this.state.videos} handleClick={this.onItemClick}/>
+    if (this.state.loaded) {
+      return (
+        <div>
+          <nav className="navbar">
+            <div className="col-md-6 offset-md-3">
+              <Search />
+            </div>
+          </nav>
+          <div className="row">
+            <div className="col-md-7">
+              <VideoPlayer video={this.state.currVideo} />
+            </div>
+            <div className="col-md-5">
+              <VideoList videos={this.state.videos} handleClick={this.onItemClick}/>
+            </div>
           </div>
         </div>
-      </div>
-    );
-    // console.log('new this = ', this);
-    // console.log('our data in App = ', data);
+      );
+    } else {
+      return (
+        <div> Loading...</div>
+      );
+    }
   }
-
-  //}
 }
 
 // In the ES6 spec, files are "modules" and do not share a top-level scope

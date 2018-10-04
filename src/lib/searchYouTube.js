@@ -1,3 +1,4 @@
+var storage;
 var searchYouTube = (options, callback) => {
   console.log('options = ', options.max);
   console.log('callback = ', callback);
@@ -8,18 +9,17 @@ var searchYouTube = (options, callback) => {
     data: {
       q: options.query,
       part: 'snippet',
-      key: options.key,
+      key: options.key || window.YOUTUBE_API_KEY,
       maxResults: options.max,
       type: 'video',
       videoEmbeddable: 'true'
     }
   })
     .done(function(data) {
+      storage = data.items;
       callback(data.items);
       console.log('our data in SearchYouTube', data.items);
       console.log('yay we have tubes!');
-      //new App(data.items);
-      //return data.items;
     })
     .fail(function(data) {
       console.log('boo, no tubes', data);
@@ -27,4 +27,5 @@ var searchYouTube = (options, callback) => {
 };
 
 window.searchYouTube = searchYouTube;
+window.storage = storage;
 //{ key: 'API_KEY', query: 'cats', max: 10 }
