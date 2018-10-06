@@ -1,84 +1,75 @@
+// var App = () => (
+//   <div>
+//     <nav className="navbar">
+//       <div className="col-md-6 offset-md-3">
+//         <Search/>
+//       </div>
+//     </nav>
+//     <div className="row">
+//       <div className="col-md-7">
+//         <VideoPlayer video={window.exampleVideoData[0]}/>
+//       </div>
+//       <div className="col-md-5">
+//         <VideoList videos={window.exampleVideoData}/>
+//       </div>
+//     </div>
+//   </div>
+// );
+
 class App extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      videos: [],
-      currVideo: null,
-      loaded: false,
-      //input: 'zebra',
-      value: 'horse'
+      videos: window.exampleVideoData,
+      currentVideo: window.exampleVideoData[0]
     };
-    this.onItemClick = this.onItemClick.bind(this);
-    this.updateVideos = this.updateVideos.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
-  componentDidMount () {
-    this.props.searchYouTube({ key: this.props.API_KEY, query: this.state.value, max: 10 }, this.updateVideos);
+  componentDidMount() {
+    this.getYouTubeVideos('baby turtles');
   }
 
-  updateVideos (data) {
-    console.log('our data in app = ', data);
+  getYouTubeVideos(query) {
+    var options = {
+      key: this.props.API_KEY,
+      query: query
+    };
+    setTimeout(this.props.searchYouTube(options, (videos) => {
+      this.setState({
+        videos: videos,
+        currentVideo: videos[0]
+      });
+    }), 500);
+  }
+
+  handleVideoListEntryTitleClick(video) {
     this.setState({
-      loaded: true,
-      videos: data,
-      currVideo: data[0]
-    }, function() {
-      console.log('data in update videos = ', this.state);
+      currentVideo: video
     });
   }
-
-  onItemClick(i) {
-    this.setState({
-      thisClick: !this.state.thisClick,
-      currVideo: i
-    });
-  }
-
-  handleChange(event) {
-    this.setState({value: event.target.value});
-    //this.search();
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-    console.log('Button Pressed');
-    console.log('e = ', + this.state.value);
-    //alert('Our Search String: ', this.state.value);
-    //this.setState({value: event.target.value});
-    this.search();
-  }
-
-  search() {
-    setTimeout(this.props.searchYouTube({ key: this.props.API_KEY, query: this.state.value, max: 10 }, this.updateVideos), 500);
-  }
-
 
   render() {
-    if (this.state.loaded) {
-      return (
-        <div>
-          <nav className="navbar">
-            <div className="col-md-6 offset-md-3">
-              <Search formHandler={this.handleSubmit} textFormState={this.state.formState} handleTextChange={this.handleChange}/>
-            </div>
-          </nav>
-          <div className="row">
-            <div className="col-md-7">
-              <VideoPlayer video={this.state.currVideo} />
-            </div>
-            <div className="col-md-5">
-              <VideoList videos={this.state.videos} handleClick={this.onItemClick}/>
-            </div>
+    return (
+      <div>
+        <nav className="navbar">
+          <div className="col-md-6 offset-md-3">
+            <Search handleSearchInputChange={this.getYouTubeVideos.bind(this)}/>
+          </div>
+        </nav>
+        <div className="row">
+          <div className="col-md-7">
+            <VideoPlayer video={this.state.currentVideo}/>
+          </div>
+          <div className="col-md-5">
+            <VideoList
+              videos={this.state.videos}
+              handleVideoListEntryTitleClick={this.handleVideoListEntryTitleClick.bind(this)}
+            />
           </div>
         </div>
-      );
-    } else {
-      return (
-        <div> Loading...</div>
-      );
-    }
+      </div>
+    );
   }
 }
 
